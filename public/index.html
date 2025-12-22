@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rubik's Cube Solver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <div class="c1"></div><div class="c2"></div><div class="c3"></div>
+        <div class="c4"></div><div class="c5"></div><div class="c6"></div>
+        <div class="c7"></div><div class="c8"></div><div class="c9"></div>
+      </div>
+      <div>
+        <div class="title">Rubik's Solver</div>
+        <div class="subtitle">By Sahibjeet & Bhuvesh</div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="mode-selector">
+        <button class="btn active" id="mode2d" data-mode="2d">2D</button>
+        <button class="btn" id="mode3d" data-mode="3d">3D</button>
+      </div>
+      <button class="btn ghost" id="docsBtn">Docs</button>
+      <button class="btn ghost" id="reset">Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel inputPanel">
+      <h2>Input Scramble</h2>
+      <p class="hint">Enter moves like <code>R U R' U'</code> or paste a 9×12 net. Drop a <code>.txt</code> file too.</p>
+
+      <div class="drop" id="drop">
+        <div class="dropIcon">
+          <div class="upload-icon"></div>
+        </div>
+        <div class="dropText">
+          <div><b>Drop file here</b></div>
+          <div class="muted">or click to browse</div>
+        </div>
+        <label class="btn small" for="file">Browse</label>
+        <input id="file" type="file" accept=".txt,text/plain" hidden />
+      </div>
+
+      <textarea id="input" spellcheck="false" placeholder="R U R' U' R' F R2 U' R' U' R U R' F'"></textarea>
+
+      <div class="row">
+        <button class="btn" id="apply">Apply</button>
+        <button class="btn primary" id="solve">Solve</button>
+      </div>
+
+      <div class="status" id="status">Ready — cube is solved</div>
+
+      <h3>Solution</h3>
+      <div class="solutionBar">
+        <div class="pill" id="moveLabel">Move: —</div>
+        <button class="btn small" id="copy">Copy</button>
+      </div>
+      <pre class="solution" id="solution">—</pre>
+
+      <div class="tiny">Watch the animated solve after clicking Solve.</div>
+    </section>
+
+    <section class="panel cubePanel" id="cubePanel2d">
+      <div class="cubeHeader">
+        <div>
+          <h2>2D View</h2>
+          <p class="hint">Apply a scramble, then hit Solve to animate.</p>
+        </div>
+        <div class="pill" id="movesCount">Moves: —</div>
+      </div>
+
+      <div class="net" id="net" aria-label="2D cube net">
+        <div class="face face-U" data-face="U"><div class="faceTitle">U</div><div class="grid"></div></div>
+        <div class="face face-L" data-face="L"><div class="faceTitle">L</div><div class="grid"></div></div>
+        <div class="face face-F" data-face="F"><div class="faceTitle">F</div><div class="grid"></div></div>
+        <div class="face face-R" data-face="R"><div class="faceTitle">R</div><div class="grid"></div></div>
+        <div class="face face-B" data-face="B"><div class="faceTitle">B</div><div class="grid"></div></div>
+        <div class="face face-D" data-face="D"><div class="faceTitle">D</div><div class="grid"></div></div>
+      </div>
+
+      <div class="legend">
+        <span class="dot u"></span><span>Up</span>
+        <span class="dot r"></span><span>Right</span>
+        <span class="dot f"></span><span>Front</span>
+        <span class="dot d"></span><span>Down</span>
+        <span class="dot l"></span><span>Left</span>
+        <span class="dot b"></span><span>Back</span>
+      </div>
+    </section>
+
+    <section class="panel cubePanel hidden" id="cubePanel3d">
+      <div class="cubeHeader">
+        <div>
+          <h2>3D Interactive</h2>
+          <p class="hint">Left-click drag to rotate layers. Right-click drag to orbit view.</p>
+        </div>
+        <div class="pill" id="movesCount3d">Moves: —</div>
+      </div>
+      <div id="canvas3d" class="canvas3d"></div>
+    </section>
+  </main>
+
+  <!-- Documentation Modal -->
+  <div class="modal-overlay hidden" id="docsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Documentation</h2>
+        <button class="btn ghost modal-close" id="closeDocsBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="docs-section">
+          <h3>🎯 Overview</h3>
+          <p>This is a web-based <strong>Rubik's Cube Solver</strong> that visualizes the solving process in both 2D and 3D. It uses <strong>Kociemba's Two-Phase Algorithm</strong>, one of the most efficient methods known for solving the Rubik's Cube, typically finding solutions in 20 moves or fewer.</p>
+        </div>
+
+        <div class="docs-section">
+          <h3>📖 How to Use</h3>
+          <div class="docs-steps">
+            <div class="docs-step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <strong>Input Your Scramble</strong>
+                <p>Enter your cube scramble using standard notation (e.g., <code>R U R' U' R' F R2 U' R' U' R U R' F'</code>) in the text area, or drop a <code>.txt</code> file containing moves or a 9×12 net representation.</p>
+              </div>
+            </div>
+            <div class="docs-step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <strong>Apply the Scramble</strong>
+                <p>Click the <strong>Apply</strong> button to apply the scramble to the virtual cube. You'll see the cube update in the visualization panel.</p>
+              </div>
+            </div>
+            <div class="docs-step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <strong>Solve & Watch</strong>
+                <p>Click <strong>Solve</strong> to compute the optimal solution. The solver will animate each move, showing you exactly how to return the cube to its solved state.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="docs-section">
+          <h3>🔤 Move Notation</h3>
+          <p>Standard Rubik's Cube notation is used. Each letter represents a face:</p>
+          <div class="notation-grid">
+            <div class="notation-item"><code>U</code> Up (top face)</div>
+            <div class="notation-item"><code>D</code> Down (bottom face)</div>
+            <div class="notation-item"><code>R</code> Right face</div>
+            <div class="notation-item"><code>L</code> Left face</div>
+            <div class="notation-item"><code>F</code> Front face</div>
+            <div class="notation-item"><code>B</code> Back face</div>
+          </div>
+          <div class="docs-callout">
+            <strong>Modifiers:</strong>
+            <ul>
+              <li><code>R</code> — Clockwise 90° rotation</li>
+              <li><code>R'</code> — Counter-clockwise 90° rotation (prime)</li>
+              <li><code>R2</code> — 180° rotation (double)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="docs-section">
+          <h3>🧩 Input Formats</h3>
+          <div class="docs-subsection">
+            <h4>Move Sequence</h4>
+            <p>Space-separated moves representing a scramble from the solved state:</p>
+            <pre class="docs-code">R U R' U' R' F R2 U' R' U' R U R' F'</pre>
+          </div>
+          <div class="docs-subsection">
+            <h4>9×12 Net Format</h4>
+            <p>A text representation of all 6 faces laid out in a cross pattern. Each character represents a sticker color (W=White, R=Red, G=Green, Y=Yellow, O=Orange, B=Blue):</p>
+            <pre class="docs-code">      W W W
+      W W W
+      W W W
+O O O G G G R R R B B B
+O O O G G G R R R B B B
+O O O G G G R R R B B B
+      Y Y Y
+      Y Y Y
+      Y Y Y</pre>
+          </div>
+        </div>
+
+        <div class="docs-section">
+          <h3>⚙️ Algorithm Details</h3>
+          <p>The solver implements <strong>Kociemba's Two-Phase Algorithm</strong>:</p>
+          <div class="docs-subsection">
+            <h4>Phase 1: Reduce to G1 Subgroup</h4>
+            <p>Transforms the cube into a special state where:</p>
+            <ul>
+              <li>All edge pieces have correct orientation</li>
+              <li>All corner pieces have correct orientation</li>
+              <li>Middle layer edges are in the middle slice</li>
+            </ul>
+          </div>
+          <div class="docs-subsection">
+            <h4>Phase 2: Solve Completely</h4>
+            <p>Using only moves that preserve the G1 state (<code>U</code>, <code>D</code>, <code>R2</code>, <code>L2</code>, <code>F2</code>, <code>B2</code>), the algorithm finds the remaining moves to fully solve the cube.</p>
+          </div>
+          <div class="docs-callout">
+            <strong>Efficiency:</strong> This approach uses precomputed move tables and pruning tables to rapidly search through possibilities, typically solving any cube in under 1 second with solutions averaging ~20 moves.
+          </div>
+        </div>
+
+        <div class="docs-section">
+          <h3>🏗️ Technical Architecture</h3>
+          <div class="docs-subsection">
+            <h4>Cube Representations</h4>
+            <ul>
+              <li><strong>FaceCube</strong> — 54 stickers stored as a string (visual representation)</li>
+              <li><strong>CubieCube</strong> — Corner and edge positions with orientations (efficient for moves)</li>
+              <li><strong>CoordCube</strong> — Compressed coordinates for fast table lookups during search</li>
+            </ul>
+          </div>
+          <div class="docs-subsection">
+            <h4>API Endpoints</h4>
+            <ul>
+              <li><code>/api/state</code> — Parses input and returns the cube's facelet string</li>
+              <li><code>/api/solve</code> — Computes solution and returns moves with animation trace</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="docs-section">
+          <h3>🎮 View Modes</h3>
+          <div class="docs-subsection">
+            <h4>2D View</h4>
+            <p>Shows the cube unfolded as a net (cross pattern). Each face is displayed with its 9 stickers. During animation, the active face rotates and affected stickers pulse.</p>
+          </div>
+          <div class="docs-subsection">
+            <h4>3D View</h4>
+            <p>Interactive 3D cube you can rotate:</p>
+            <ul>
+              <li><strong>Left-click + drag</strong> on any piece to rotate that layer</li>
+              <li><strong>Right-click + drag</strong> to orbit the camera around the cube</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="docs-section">
+          <h3>⌨️ Keyboard Shortcuts</h3>
+          <div class="notation-grid">
+            <div class="notation-item"><code>Space</code> Pause/Resume animation</div>
+            <div class="notation-item"><code>Esc</code> Close this modal</div>
+          </div>
+        </div>
+
+        <div class="docs-section">
+          <h3>👨‍💻 Credits</h3>
+          <p>Created by <strong>Sahibjeet Pal Singh</strong> and <strong>Bhuvesh Chauhan</strong>.</p>
+          <p>The solving algorithm is inspired by <strong>Herbert Kociemba's Two-Phase Algorithm</strong>, a groundbreaking approach that revolutionized computer-based cube solving.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Created by Sahibjeet Pal Singh & Bhuvesh Chauhan — Inspired by Kociemba's algorithm
+  </footer>
+
+  <script src="cube3d.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Documentation Modal
+    const docsBtn = document.getElementById('docsBtn');
+    const docsModal = document.getElementById('docsModal');
+    const closeDocsBtn = document.getElementById('closeDocsBtn');
+
+    docsBtn.addEventListener('click', () => {
+      docsModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    });
+
+    closeDocsBtn.addEventListener('click', () => {
+      docsModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    });
+
+    docsModal.addEventListener('click', (e) => {
+      if (e.target === docsModal) {
+        docsModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !docsModal.classList.contains('hidden')) {
+        docsModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>

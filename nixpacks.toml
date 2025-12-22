@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["jdk17"]
+
+[phases.build]
+cmds = ["javac -d bin src/*.java"]
+
+[start]
+cmd = "java -cp bin RubikWebServer"

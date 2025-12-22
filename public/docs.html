@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Documentation — Rubik's Cube Solver</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .docsWrap{max-width: 980px;margin: 26px auto;padding: 0 18px}
+    .docsWrap h1{margin:0 0 6px;font-size:26px;letter-spacing:-.02em}
+    .docsWrap h2{margin-top:18px}
+    .docsWrap p, .docsWrap li{color: rgba(11,18,32,.78); line-height:1.6}
+    .docsWrap code{background: rgba(15,23,42,.04); padding: 2px 6px; border-radius: 8px; border:1px solid rgba(15,23,42,.08)}
+    .callout{border:1px solid rgba(37,99,235,.18); background: rgba(37,99,235,.04); padding: 12px 14px; border-radius: 16px}
+  </style>
+</head>
+<body>
+  <div class="docsWrap">
+    <div class="panel">
+      <h1>Rubik's Cube Solver — Documentation</h1>
+      <div class="subtitle">Creators: Sahibjeet Pal Singh • Bhuvesh Chauhan • Inspired by Kociemba</div>
+
+      <div class="callout" style="margin-top:14px">
+        This website is a clean 2D visualizer on top of our Java solver. You can paste a scramble or a 9×12 testcase net, press <b>Set on Cube</b>, then press <b>Solve</b> to watch the solution animate move-by-move.
+      </div>
+
+      <h2>1) What this project does (non‑coder view)</h2>
+      <ul>
+        <li><b>You give an unsolved cube</b> as either scramble moves (like <code>R U R' U'</code>) or the 9×12 net from testcase files.</li>
+        <li><b>The program converts that input</b> into a standard 54‑character cube description.</li>
+        <li><b>The solver finds a solution</b> using Kociemba’s Two‑Phase approach.</li>
+        <li><b>The website animates the solution</b> so you can follow each move and see the cube return to solved.</li>
+      </ul>
+
+      <h2>2) Algorithm choice (what’s inside the solver)</h2>
+      <p>
+        Our solver implements <b>Kociemba’s Two‑Phase Algorithm</b>, a well‑known method that solves a cube efficiently while keeping solutions short (often near 20 moves).
+        Instead of searching every possible cube state, it breaks the problem into two stages:
+      </p>
+      <ul>
+        <li><b>Phase 1</b>: transforms the cube into a special subgroup (often called G1) by fixing edge/corner orientation and placing middle-layer edges into the correct slice.</li>
+        <li><b>Phase 2</b>: finishes the solve using a reduced move set, completing permutation to the solved state.</li>
+      </ul>
+
+      <h2>3) How the code represents the cube (technical but readable)</h2>
+      <ul>
+        <li><b>Facelets (54 stickers)</b>: a string like <code>UUUU...BBBB</code> describes the cube by sticker colors by face.</li>
+        <li><b>FaceCube</b>: stores the 54 stickers and can convert to a cubie representation.</li>
+        <li><b>CubieCube</b>: stores corners and edges (their positions + orientations). This is the efficient “physics” view of the cube for searching.</li>
+        <li><b>CoordCube</b>: stores compressed coordinates and move tables for fast transitions.</li>
+        <li><b>Search</b>: runs the two‑phase search, using pruning tables to cut off impossible/slow branches quickly.</li>
+      </ul>
+
+      <h2>4) Why move tables & pruning matter</h2>
+      <p>
+        The cube has an enormous number of states. The implementation uses <b>precomputed move tables</b> (fast “where do we go if we do move X?”)
+        and <b>pruning tables</b> (fast “how close is this state?” lower bounds) to make search practical.
+      </p>
+
+      <h2>5) How the website connects to the Java solver</h2>
+      <ul>
+        <li><code>/api/state</code> parses your input into facelets and returns it to the browser.</li>
+        <li><code>/api/solve</code> calls <code>Search.solution(facelets, ...)</code> and returns:
+          <ul>
+            <li>the solution string,</li>
+            <li>the list of moves,</li>
+            <li>a full <b>trace</b> of facelet states after each move (used for animation).</li>
+          </ul>
+        </li>
+        <li>The browser draws a 2D cube net and animates each move by highlighting the face and updating to the next traced state.</li>
+      </ul>
+
+      <h2>6) Credits</h2>
+      <p>
+        Created by <b>Sahibjeet Pal Singh</b> and <b>Bhuvesh Chauhan</b>. The solving approach is inspired by <b>Kociemba’s Two‑Phase Algorithm</b>.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
