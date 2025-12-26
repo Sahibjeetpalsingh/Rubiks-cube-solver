@@ -273,6 +273,10 @@ textarea::placeholder{color:#9ca3af}
   margin-bottom:16px;
 }
 
+.cubePanel {
+  overflow: hidden;
+}
+
 .net{
   display:grid;
   grid-template-columns: repeat(4, calc(3*var(--st) + 2*var(--gap) + 20px));
@@ -584,4 +588,407 @@ textarea::placeholder{color:#9ca3af}
 @media (max-width: 600px){
   .modal{max-height:100vh;border-radius:0}
   .notation-grid{grid-template-columns:1fr}
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  :root {
+    --st: 32px;
+    --gap: 3px;
+  }
+  
+  /* Header adjustments */
+  .topbar {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .brand {
+    gap: 8px;
+  }
+  
+  .logo {
+    width: 30px;
+    height: 30px;
+    padding: 3px;
+  }
+  
+  .title {
+    font-size: 15px;
+  }
+  
+  .subtitle {
+    font-size: 10px;
+  }
+  
+  .actions {
+    gap: 6px;
+  }
+  
+  .mode-selector .btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  
+  .btn.ghost {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  /* Layout adjustments */
+  .layout {
+    padding: 12px;
+    gap: 16px;
+  }
+  
+  /* Panel adjustments */
+  .panel {
+    padding: 16px;
+    border-radius: 10px;
+  }
+  
+  .inputPanel {
+    gap: 12px;
+  }
+  
+  h2 {
+    font-size: 14px;
+  }
+  
+  /* Drop zone adjustments */
+  .drop {
+    padding: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .dropIcon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .upload-icon {
+    width: 18px;
+    height: 12px;
+  }
+  
+  .upload-icon::before {
+    width: 7px;
+    height: 4px;
+    top: -4px;
+  }
+  
+  .dropText b {
+    font-size: 13px;
+  }
+  
+  /* Textarea adjustments */
+  textarea {
+    height: 100px;
+    padding: 10px;
+    font-size: 11px;
+  }
+  
+  /* Cube net adjustments for mobile */
+  .net {
+    grid-template-columns: repeat(4, calc(3 * var(--st) + 2 * var(--gap) + 14px));
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  
+  .face {
+    padding: 8px;
+    border-radius: 8px;
+  }
+  
+  .faceTitle {
+    font-size: 9px;
+    top: 4px;
+    left: 6px;
+  }
+  
+  .grid {
+    margin-top: 12px;
+  }
+  
+  .sticker {
+    border-radius: 4px;
+    border-width: 1.5px;
+  }
+  
+  /* Legend */
+  .legend {
+    gap: 10px;
+    margin-top: 16px;
+  }
+  
+  .legend span:not(.dot) {
+    font-size: 10px;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  /* Solution area */
+  .solution {
+    min-height: 50px;
+    padding: 10px;
+    font-size: 11px;
+  }
+  
+  .solutionBar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  /* 3D canvas */
+  .canvas3d {
+    height: 350px;
+  }
+  
+  /* Cube header */
+  .cubeHeader {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .pill {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+}
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+  :root {
+    --st: 26px;
+    --gap: 2px;
+  }
+  
+  .topbar {
+    padding: 8px 10px;
+  }
+  
+  .brand {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .logo {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .title {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .subtitle {
+    display: none;
+  }
+  
+  .actions {
+    flex-shrink: 0;
+  }
+  
+  .mode-selector .btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .btn.ghost {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  /* Hide docs button text on very small screens */
+  #docsBtn {
+    padding: 4px 6px;
+  }
+  
+  .layout {
+    padding: 8px;
+    gap: 12px;
+  }
+  
+  .panel {
+    padding: 12px;
+  }
+  
+  .drop {
+    padding: 10px;
+  }
+  
+  .dropText {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .dropText b {
+    font-size: 12px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .btn.small {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  
+  textarea {
+    height: 80px;
+    font-size: 10px;
+  }
+  
+  .row .btn {
+    flex: 1;
+    padding: 8px 12px;
+  }
+  
+  /* Cube net - make it scrollable horizontally */
+  .net {
+    grid-template-columns: repeat(4, calc(3 * var(--st) + 2 * var(--gap) + 12px));
+    gap: 6px;
+    justify-content: flex-start;
+  }
+  
+  .cubePanel {
+    overflow-x: auto;
+  }
+  
+  .face {
+    padding: 6px;
+  }
+  
+  .faceTitle {
+    font-size: 8px;
+    top: 3px;
+    left: 4px;
+  }
+  
+  .grid {
+    margin-top: 10px;
+  }
+  
+  .legend {
+    gap: 6px 12px;
+    justify-content: flex-start;
+  }
+  
+  .legend span:not(.dot) {
+    font-size: 9px;
+    margin-left: 2px;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-width: 1.5px;
+  }
+  
+  .status {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+  
+  .solution {
+    min-height: 40px;
+    padding: 8px;
+    font-size: 10px;
+  }
+  
+  .tiny {
+    font-size: 10px;
+  }
+  
+  /* 3D canvas */
+  .canvas3d {
+    height: 280px;
+  }
+  
+  /* Modal adjustments */
+  .modal-header {
+    padding: 14px 16px;
+  }
+  
+  .modal-header h2 {
+    font-size: 16px;
+  }
+  
+  .modal-body {
+    padding: 16px;
+  }
+  
+  .docs-section h3 {
+    font-size: 14px;
+  }
+  
+  .docs-step {
+    gap: 10px;
+  }
+  
+  .step-number {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+}
+
+/* Very small screens - force horizontal scroll for cube */
+@media (max-width: 380px) {
+  :root {
+    --st: 22px;
+    --gap: 2px;
+  }
+  
+  .topbar {
+    gap: 6px;
+  }
+  
+  .logo {
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+  }
+  
+  .title {
+    font-size: 13px;
+  }
+  
+  .mode-selector {
+    padding: 2px;
+  }
+  
+  .mode-selector .btn {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+  
+  #reset {
+    display: none;
+  }
+  
+  .net {
+    grid-template-columns: repeat(4, calc(3 * var(--st) + 2 * var(--gap) + 10px));
+    gap: 4px;
+  }
+  
+  .face {
+    padding: 5px;
+    border-radius: 6px;
+  }
+  
+  .canvas3d {
+    height: 240px;
+  }
 }
