@@ -164,6 +164,10 @@ rubiks-solver-2d-animated/
 │   ├── CubieCube.java     # Cubie cube model
 │   ├── FaceCube.java      # Face color model
 │   └── ...                # Additional utilities
+├── testcases/              # Sample scramble files
+│   ├── scramble01.txt     # Test case 1
+│   ├── scramble02.txt     # Test case 2
+│   └── ...                # 40 test cases total
 ├── Dockerfile             # Docker configuration
 ├── fly.toml               # Fly.io deployment
 ├── railway.json           # Railway deployment
@@ -171,6 +175,38 @@ rubiks-solver-2d-animated/
 ├── run.bat                # Windows run script
 └── run.sh                 # Unix run script
 ```
+
+---
+
+## 🧪 Test Cases
+
+The `testcases/` folder contains **40 sample scramble files** for testing the solver. Each file uses the **9×12 net format** representing the cube's 6 faces.
+
+### Format Example (`scramble01.txt`):
+```
+   OOG
+   OOW
+   OOW
+YGGWWRBBOYBB
+GGGWWOYBBYYY
+GGGWWWOBBYYY
+   RRB
+   RRR
+   RRR
+```
+
+### How to Use Test Cases:
+1. Open the web app at [rubikscube.fly.dev](https://rubikscube.fly.dev/)
+2. Drag & drop any `.txt` file from the `testcases/` folder
+3. Click **Solve** to see the solution!
+
+### Color Legend:
+- `W` = White (Up)
+- `R` = Red (Right)
+- `G` = Green (Front)
+- `Y` = Yellow (Down)
+- `O` = Orange (Left)
+- `B` = Blue (Back)
 
 ---
 
